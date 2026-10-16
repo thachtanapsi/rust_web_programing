@@ -1,0 +1,14 @@
+[package]
+name = "web_app"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+resolver = "2"
+members = [
+    "to_do/core",
+    "to_do/dal"
+]
+
+[dependencies]
+rand = "0.10.3"
