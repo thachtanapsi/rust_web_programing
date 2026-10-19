@@ -5,6 +5,9 @@ use crate::structs::{
 };
 use crate::enums::TaskStatus;
 
+#[cfg(feature = "json-file-storage")]
+use to_do_dal::json_file::save_one;
+
 pub enum ItemTypes {
     Pending(Pending),
     Done(Done),
@@ -25,13 +28,15 @@ impl fmt::Display for ItemTypes {
     }
 }
 
-pub fn create(title: &str, status: TaskStatus) -> ItemTypes {
-    match status {
+pub fn create(title: &str, status: TaskStatus)
+    -> Result<ItemTypes, String> {
+    let _ = save_one(&title.to_string(), &status)?;
+    match &status {
         TaskStatus::PENDING => {
-            ItemTypes::Pending(Pending::new(&title))
+            Ok(ItemTypes::Pending(Pending::new(&title)))
         },
         TaskStatus::DONE => {
-            ItemTypes::Done(Done::new(&title))
+            Ok(ItemTypes::Done(Done::new(&title)))
         },
     }
 }
